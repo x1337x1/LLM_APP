@@ -19,6 +19,14 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res, next) => {
+    try {
+        res.send("success")
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 db.once("open", () => {
     app.listen(PORT, async () => {
         console.log(`API server running on port ${PORT}!`);

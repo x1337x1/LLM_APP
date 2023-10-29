@@ -2,17 +2,19 @@ const { Schema } = require("mongoose");
 
 const accountSchema = new Schema({
     email: {
-        Type: String,
+        type: String,
         required: true,
-        unique: true
+    },
+    tenantId: {
+        type: String,
+        required: true,
     },
     password: {
-        Type: String,
+        type: String,
         required: true,
-
     },
     name: {
-        Type: String,
+        type: String,
         required: true
     }
 },

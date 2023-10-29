@@ -13,6 +13,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+app.use(require("./utils/responseHandler/responseHandler"));
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());

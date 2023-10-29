@@ -15,6 +15,7 @@
     "express-jade": "^0.0.3",
     "express-router": "^0.0.1",
     "express-validator": "^7.0.1",
+    "generate-api-key": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",

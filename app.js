@@ -10,7 +10,6 @@ const cookieParser = require("cookie-parser");
 
 
 
-
 const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -18,14 +17,8 @@ app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api", require("./routes"));
 
-app.get("/", (req, res, next) => {
-    try {
-        res.send("success")
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 db.once("open", () => {
     app.listen(PORT, async () => {

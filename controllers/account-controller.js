@@ -1,6 +1,7 @@
 const { getAccountCollection, createTenantDB } = require("../utils/multi-tenancy/tenancy")
 const { generateApiKey } = require('generate-api-key');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const accountController = {
     async signup(req, res) {
@@ -16,7 +17,7 @@ const accountController = {
             const account = await createTenantDB(tenantId, data)
             res.created({ data: account })
         } catch (error) {
-            console.log(error)
+            res.failureResponse()
         }
     },
 
@@ -25,20 +26,25 @@ const accountController = {
             const { tenantId } = req.query
             const { email, password } = req.body
             const AccountModel = await getAccountCollection(tenantId)
-            const user = await AccountModel.findOne({ email: email })
-            if (!user) return res.recordNotFound()
+            const tenant = await AccountModel.findOne({ email: email })
+            if (!tenant) return res.recordNotFound()
             /**
              * check if user password matches the on in database
              */
-            const isAuth = await bcrypt.compare(password, user.password);
+            const isAuth = await bcrypt.compare(password, tenant.password);
 
             // if true then return authorized :)
-            if (isAuth) return res.ok({ data: user })
-
+            const tenantData = {
+                email: tenant.email,
+                id: tenant._id,
+                name: tenant.name
+            }
+            const accessToken = jwt.sign(tenantData, process.env.ACCESS_TOKEN);
+            if (isAuth) return res.ok({ data: accessToken })
             // if wrong then return unauthorized :(
             return res.unAuthorizedRequest();
         } catch (error) {
-            console.log(error)
+            res.failureResponse()
         }
     }
 
